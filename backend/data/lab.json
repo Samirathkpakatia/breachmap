@@ -32,6 +32,7 @@
     {"source": "compte_admin", "cible": "serveur_app", "protocole": "Accès privilégié", "probabilite": 0.8, "mesures": ["mfa"]},
     {"source": "compte_admin", "cible": "base_donnees", "protocole": "Accès privilégié", "probabilite": 0.8, "mesures": ["mfa", "moindre_privilege"]},
     {"source": "compte_admin", "cible": "sauvegardes", "protocole": "Accès privilégié", "probabilite": 0.7, "mesures": ["mfa"]},
-    {"source": "compte_admin", "cible": "serveur_rh", "protocole": "Accès privilégié", "probabilite": 0.7, "mesures": ["mfa"]}
+    {"source": "compte_admin", "cible": "serveur_rh", "protocole": "Accès privilégié", "probabilite": 0.7, "mesures": ["mfa"]},
+    {"source": "postes", "cible": "switch", "protocole": "Déplacement latéral", "probabilite": 0.6, "mesures": ["segmentation"]}
   ]
 }
