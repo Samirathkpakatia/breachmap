@@ -5,8 +5,11 @@ app = FastAPI(title="BreachMap")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # à restreindre plus tard
-    allow_methods=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://breachmap-peach.vercel.app",
+    ],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
