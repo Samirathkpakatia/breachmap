@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 import networkx as nx
+from moteur.mesures import EFFICACITE
 
 CHEMIN_LAB = Path(__file__).resolve().parent.parent / "data" / "lab.json"
 
@@ -11,16 +12,21 @@ def charger_environnement():
         return json.load(f)
 
 
-def construire_graphe(env):
+def construire_graphe(env, mesures_actives=None):
+    actives = set(mesures_actives or [])
     g = nx.DiGraph()
     for n in env["noeuds"]:
         g.add_node(n["id"], **{k: v for k, v in n.items() if k != "id"})
     for r in env["relations"]:
+        proba = r["probabilite"]
+        for m in r["mesures"]:
+            if m in actives:
+                proba *= 1 - EFFICACITE[m]
         g.add_edge(
             r["source"],
             r["cible"],
             protocole=r["protocole"],
-            probabilite=r["probabilite"],
+            probabilite=proba,
             mesures=r["mesures"],
         )
     return g

@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
 from moteur.graphe import charger_environnement, construire_graphe, simuler
-from moteur.risque import evaluer
+from moteur.mesures import EFFICACITE
+from moteur.risque import comparer, evaluer
 
 app = FastAPI(title="BreachMap")
 

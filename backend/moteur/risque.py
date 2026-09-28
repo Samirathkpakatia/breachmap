@@ -1,4 +1,4 @@
-from moteur.graphe import simuler
+from moteur.graphe import construire_graphe, simuler
 
 
 def niveau(score):
@@ -21,4 +21,18 @@ def evaluer(g, depart):
         "score": score,
         "niveau": niveau(score),
         "atteignables": atteignables,
+    }
+
+def comparer(env, depart, mesures):
+    avant = evaluer(construire_graphe(env), depart)
+    apres = evaluer(construire_graphe(env, mesures), depart)
+    reduction = 0.0
+    if avant["score"]:
+        reduction = round(100 * (avant["score"] - apres["score"]) / avant["score"], 1)
+    return {
+        "depart": depart,
+        "mesures": mesures,
+        "avant": avant,
+        "apres": apres,
+        "reduction_pct": reduction,
     }
