@@ -1,0 +1,37 @@
+{
+  "nom": "Laboratoire BreachMap",
+  "noeuds": [
+    {"id": "internet", "nom": "Internet", "type": "externe", "zone": "Externe", "criticite": 1, "x": 300, "y": 0},
+    {"id": "pare_feu", "nom": "Pare-feu", "type": "securite", "zone": "Périmètre", "criticite": 4, "x": 300, "y": 120},
+    {"id": "serveur_web", "nom": "Serveur Web", "type": "serveur", "zone": "DMZ", "criticite": 3, "x": 100, "y": 260},
+    {"id": "serveur_app", "nom": "Serveur applicatif", "type": "serveur", "zone": "Applicative", "criticite": 4, "x": 100, "y": 400},
+    {"id": "base_donnees", "nom": "Base de données", "type": "base", "zone": "Données", "criticite": 5, "x": 100, "y": 540},
+    {"id": "donnees_sensibles", "nom": "Données sensibles", "type": "donnees", "zone": "Données", "criticite": 5, "x": 0, "y": 680},
+    {"id": "sauvegardes", "nom": "Sauvegardes", "type": "sauvegarde", "zone": "Données", "criticite": 4, "x": 200, "y": 680},
+    {"id": "vpn", "nom": "VPN", "type": "acces_distant", "zone": "Périmètre", "criticite": 3, "x": 500, "y": 260},
+    {"id": "routeur", "nom": "Routeur", "type": "reseau", "zone": "Interne", "criticite": 3, "x": 500, "y": 400},
+    {"id": "switch", "nom": "Switch", "type": "reseau", "zone": "Interne", "criticite": 3, "x": 500, "y": 520},
+    {"id": "postes", "nom": "Postes utilisateurs", "type": "poste", "zone": "Interne", "criticite": 2, "x": 420, "y": 650},
+    {"id": "serveur_rh", "nom": "Serveur RH", "type": "serveur", "zone": "Interne", "criticite": 4, "x": 600, "y": 650},
+    {"id": "compte_admin", "nom": "Compte administrateur", "type": "identite", "zone": "Interne", "criticite": 5, "x": 300, "y": 400}
+  ],
+  "relations": [
+    {"source": "internet", "cible": "pare_feu", "protocole": "Trafic entrant", "probabilite": 1.0, "mesures": []},
+    {"source": "pare_feu", "cible": "serveur_web", "protocole": "HTTPS 443", "probabilite": 0.8, "mesures": ["durcissement"]},
+    {"source": "pare_feu", "cible": "vpn", "protocole": "VPN", "probabilite": 0.5, "mesures": ["mfa"]},
+    {"source": "serveur_web", "cible": "serveur_app", "protocole": "API interne", "probabilite": 0.7, "mesures": ["segmentation", "durcissement"]},
+    {"source": "serveur_app", "cible": "base_donnees", "protocole": "SQL", "probabilite": 0.7, "mesures": ["moindre_privilege", "segmentation"]},
+    {"source": "base_donnees", "cible": "donnees_sensibles", "protocole": "Lecture des données", "probabilite": 0.9, "mesures": ["moindre_privilege"]},
+    {"source": "base_donnees", "cible": "sauvegardes", "protocole": "Réplication", "probabilite": 0.6, "mesures": ["segmentation"]},
+    {"source": "vpn", "cible": "routeur", "protocole": "Tunnel VPN", "probabilite": 0.8, "mesures": ["mfa"]},
+    {"source": "routeur", "cible": "switch", "protocole": "Réseau interne", "probabilite": 0.9, "mesures": ["segmentation"]},
+    {"source": "switch", "cible": "postes", "protocole": "LAN", "probabilite": 0.9, "mesures": ["segmentation"]},
+    {"source": "switch", "cible": "serveur_rh", "protocole": "LAN", "probabilite": 0.7, "mesures": ["segmentation", "moindre_privilege"]},
+    {"source": "switch", "cible": "serveur_app", "protocole": "Accès interne vers applicatif", "probabilite": 0.5, "mesures": ["segmentation"]},
+    {"source": "postes", "cible": "compte_admin", "protocole": "Vol d'identifiants", "probabilite": 0.4, "mesures": ["mfa", "moindre_privilege"]},
+    {"source": "compte_admin", "cible": "serveur_app", "protocole": "Accès privilégié", "probabilite": 0.8, "mesures": ["mfa"]},
+    {"source": "compte_admin", "cible": "base_donnees", "protocole": "Accès privilégié", "probabilite": 0.8, "mesures": ["mfa", "moindre_privilege"]},
+    {"source": "compte_admin", "cible": "sauvegardes", "protocole": "Accès privilégié", "probabilite": 0.7, "mesures": ["mfa"]},
+    {"source": "compte_admin", "cible": "serveur_rh", "protocole": "Accès privilégié", "probabilite": 0.7, "mesures": ["mfa"]}
+  ]
+}
