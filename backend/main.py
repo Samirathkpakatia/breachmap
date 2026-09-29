@@ -41,3 +41,22 @@ def risque(depart: str):
         return evaluer(g, depart)
     except ValueError:
         raise HTTPException(status_code=404, detail="Actif inconnu")
+
+
+@app.get("/mesures")
+def mesures():
+    return EFFICACITE
+
+
+@app.get("/comparaison/{depart}")
+def comparaison(depart: str, mesures: str = ""):
+    liste = [m for m in mesures.split(",") if m]
+    inconnues = [m for m in liste if m not in EFFICACITE]
+    if inconnues:
+        raise HTTPException(
+            status_code=400, detail=f"Mesure inconnue : {', '.join(inconnues)}"
+        )
+    try:
+        return comparer(charger_environnement(), depart, liste)
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Actif inconnu")
