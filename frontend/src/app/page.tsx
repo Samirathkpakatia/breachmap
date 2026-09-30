@@ -1,6 +1,10 @@
-import GrapheLab from "@/components/GrapheLab";
+import EnTetePage from "@/components/layout/EnTetePage";
 
-// Page d'accueil : elle affiche simplement le graphe du laboratoire.
-export default function Home() {
-  return <GrapheLab />;
+export default function PageTableauDeBord() {
+  return (
+    <EnTetePage
+      titre="Tableau de bord"
+      description="Vue d'ensemble des scénarios et des niveaux de risque."
+    />
+  );
 }
