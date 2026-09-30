@@ -1,7 +1,15 @@
-import GrapheLab from "@/components/GrapheLab";
+import EnTetePage from "@/components/layout/EnTetePage";
+import VueLaboratoire from "@/components/graphe/VueLaboratoire";
 
-// Provisoire : on réutilise le graphe actuel tel quel.
-// À l'étape 2, on le refait proprement dans components/graphe/.
+// La page reste très simple : un titre, puis la vue qui fait le travail.
 export default function PageLaboratoire() {
-  return <GrapheLab />;
+  return (
+    <>
+      <EnTetePage
+        titre="Laboratoire"
+        description="Environnement simulé : actifs, zones, relations et niveau d'exposition."
+      />
+      <VueLaboratoire />
+    </>
+  );
 }
