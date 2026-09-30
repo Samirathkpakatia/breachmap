@@ -5,12 +5,19 @@ import networkx as nx
 from moteur.mesures import EFFICACITE
 
 CHEMIN_LAB = Path(__file__).resolve().parent.parent / "data" / "lab.json"
+CHEMIN_SCENARIOS = CHEMIN_LAB.parent / "scenarios.json"
 
 
 def charger_environnement():
     with open(CHEMIN_LAB, encoding="utf-8") as f:
         return json.load(f)
 
+
+def charger_scenarios():
+    """Lit scenarios.json : la liste des scénarios proposés à l'utilisateur."""
+    with open(CHEMIN_SCENARIOS, encoding="utf-8") as f:
+        return json.load(f)
+        
 
 def construire_graphe(env, mesures_actives=None):
     actives = set(mesures_actives or [])

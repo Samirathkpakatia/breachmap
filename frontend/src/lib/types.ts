@@ -45,6 +45,7 @@ export type Evaluation = {
   score: number;
   niveau: Niveau;
   atteignables: Atteignable[];
+  liens: Record<string, number>; // probabilité de chaque relation ("source-cible")
 };
 
 // La comparaison avant/après l'activation de mesures de sécurité.
@@ -54,4 +55,13 @@ export type Comparaison = {
   avant: Evaluation;
   apres: Evaluation;
   reduction_pct: number;
+};
+
+// Un scénario de démonstration proposé à l'utilisateur.
+export type Scenario = {
+  id: string;
+  nom: string;
+  description: string;
+  depart: string; // identifiant de l'actif compromis au départ
+  mesures_suggerees: string[];
 };

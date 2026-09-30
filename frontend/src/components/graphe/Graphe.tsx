@@ -90,6 +90,7 @@ type Props = {
   etats?: Record<string, EtatActif>; // états des actifs (étape 3)
   liensActifs?: Set<string>; // liens du chemin de compromission (étape 3)
   afficherProbabilites?: boolean; // écrit le pourcentage sur chaque flèche
+  probasLiens?: Record<string, number>; // probabilités à afficher (après mesures)
 };
 
 export default function Graphe({
@@ -99,6 +100,7 @@ export default function Graphe({
   etats,
   liensActifs,
   afficherProbabilites = false,
+  probasLiens
 }: Props) {
   // Actifs de l'API -> blocs du graphe. Positions issues de lab.json.
   const noeuds: NoeudActif[] = useMemo(
@@ -119,7 +121,7 @@ export default function Graphe({
     [env, selection, etats]
   );
 
-  // Relations de l'API -> flèches. Celles du chemin sont orange et animées.
+   // Relations de l'API -> flèches. Celles du chemin sont orange et animées.
   const liens: Edge[] = useMemo(
     () =>
       env.relations.map((r) => {
@@ -128,25 +130,30 @@ export default function Graphe({
         // Quand une simulation est affichée, les flèches hors chemin sont estompées.
         const estompe = liensActifs !== undefined && !actif;
         const couleur = actif ? "#f97316" : "#94a3b8";
+        // Probabilité après mesures si on l'a, sinon celle du laboratoire.
+        const proba = probasLiens?.[id] ?? r.probabilite;
         return {
           id,
           source: r.source,
           target: r.cible,
           animated: actif,
-          label: afficherProbabilites
-            ? `${Math.round(r.probabilite * 100)} %`
-            : undefined,
-          labelStyle: { fontSize: 11, fill: "#64748b" },
-          labelBgStyle: { fill: "transparent" },
+          label: afficherProbabilites ? `${Math.round(proba * 100)} %` : undefined,
+          // Pastille sombre + texte clair : lisible en thème clair comme sombre.
+          labelStyle: { fontSize: 12, fill: "#e2e8f0" },
+          labelBgStyle: { fill: "#0f172a", fillOpacity: 0.85 },
+          labelBgPadding: [4, 2] as [number, number],
+          labelBgBorderRadius: 4,
           style: {
             stroke: couleur,
-            strokeWidth: actif ? 3 : 1.5,
+            // L'épaisseur d'une flèche du chemin suit sa probabilité :
+            // une mesure la fait visiblement maigrir.
+            strokeWidth: actif ? 1 + 4 * proba : 1.5,
             opacity: estompe ? 0.2 : 1,
           },
           markerEnd: { type: MarkerType.ArrowClosed, color: couleur },
         };
       }),
-    [env, liensActifs, afficherProbabilites]
+    [env, liensActifs, afficherProbabilites, probasLiens]
   );
 
   return (

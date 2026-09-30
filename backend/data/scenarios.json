@@ -1,0 +1,30 @@
+[
+  {
+    "id": "web",
+    "nom": "Compromission d'un serveur Web",
+    "description": "Un attaquant externe exploite le serveur exposé dans la DMZ et tente de progresser vers les données.",
+    "depart": "serveur_web",
+    "mesures_suggerees": ["segmentation"]
+  },
+  {
+    "id": "admin",
+    "nom": "Compromission d'un compte administrateur",
+    "description": "Les identifiants d'un compte privilégié sont volés : impact d'un compte aux droits étendus.",
+    "depart": "compte_admin",
+    "mesures_suggerees": ["mfa", "moindre_privilege"]
+  },
+  {
+    "id": "poste",
+    "nom": "Compromission d'un poste utilisateur",
+    "description": "Un poste du réseau interne est infecté : jusqu'où un accès initial limité peut-il conduire ?",
+    "depart": "postes",
+    "mesures_suggerees": ["mfa", "segmentation"]
+  },
+  {
+    "id": "vpn",
+    "nom": "Propagation depuis l'accès VPN",
+    "description": "L'accès distant est détourné : effet de la segmentation du réseau interne sur la propagation.",
+    "depart": "vpn",
+    "mesures_suggerees": ["segmentation", "mfa"]
+  }
+]

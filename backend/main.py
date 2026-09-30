@@ -1,9 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
-from moteur.graphe import charger_environnement, construire_graphe, simuler
 from moteur.mesures import EFFICACITE
 from moteur.risque import comparer, evaluer
+from moteur.graphe import (
+    charger_environnement,
+    charger_scenarios,
+    construire_graphe,
+    simuler,
+)
 
 app = FastAPI(title="BreachMap")
 
@@ -60,3 +65,9 @@ def comparaison(depart: str, mesures: str = ""):
         return comparer(charger_environnement(), depart, liste)
     except ValueError:
         raise HTTPException(status_code=404, detail="Actif inconnu")
+
+
+@app.get("/scenarios")
+def scenarios():
+    """Renvoie les scénarios de démonstration (actif de départ, mesures suggérées)."""
+    return charger_scenarios()
