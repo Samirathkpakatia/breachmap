@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from moteur.mesures import EFFICACITE
 from moteur.risque import comparer, evaluer
 from moteur.registre import SEUILS, charger_registre, grille
+from moteur.synthese import synthese
 from moteur.graphe import (
     charger_environnement,
     charger_scenarios,
@@ -82,3 +83,8 @@ def registre():
         "grille": grille(),
         "seuils": dict(SEUILS),
     }
+
+@app.get("/tableau-de-bord")
+def tableau_de_bord():
+    """Renvoie la synthèse : indicateurs, scénarios classés, répartition des risques."""
+    return synthese()

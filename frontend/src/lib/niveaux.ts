@@ -21,3 +21,12 @@ export const NIVEAUX: Record<Niveau, { libelle: string; classes: string }> = {
     classes: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
   },
 };
+
+// Couleurs pleines des niveaux, pour les barres (les pastilles utilisent des
+// teintes pâles). Même palette que ci-dessus : une seule logique de couleurs.
+export const COULEURS_BARRE: Record<Niveau, string> = {
+  faible: "bg-green-500",
+  moyen: "bg-yellow-500",
+  élevé: "bg-orange-500",
+  critique: "bg-red-500",
+};

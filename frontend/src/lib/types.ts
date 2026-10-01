@@ -87,3 +87,27 @@ export type Registre = {
   grille: Record<string, Niveau>; // niveau de chaque case "vraisemblance-impact"
   seuils: Record<string, number>; // seuils des niveaux sur le produit
 };
+
+
+// Résumé d'un scénario, tel que renvoyé par /tableau-de-bord.
+export type ResumeScenario = {
+  id: string;
+  nom: string;
+  depart: string;
+  depart_nom: string;
+  mesures: string[]; // mesures suggérées appliquées pour le score « après »
+  score_avant: number;
+  niveau_avant: Niveau;
+  score_apres: number;
+  niveau_apres: Niveau;
+  reduction_pct: number;
+  nb_atteints: number;
+};
+
+// Ce que renvoie la route /tableau-de-bord.
+export type TableauDeBord = {
+  environnement: { nom: string; actifs: number; relations: number };
+  scenarios: ResumeScenario[]; // déjà classés du plus au moins risqué
+  repartition_risques: Record<Niveau, number>;
+  nb_risques: number;
+};
