@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
 from moteur.mesures import EFFICACITE
 from moteur.risque import comparer, evaluer
+from moteur.registre import SEUILS, charger_registre, grille
 from moteur.graphe import (
     charger_environnement,
     charger_scenarios,
@@ -71,3 +72,13 @@ def comparaison(depart: str, mesures: str = ""):
 def scenarios():
     """Renvoie les scénarios de démonstration (actif de départ, mesures suggérées)."""
     return charger_scenarios()
+
+
+@app.get("/registre")
+def registre():
+    """Renvoie le registre des risques, la grille de la matrice et les seuils."""
+    return {
+        "risques": charger_registre(),
+        "grille": grille(),
+        "seuils": dict(SEUILS),
+    }

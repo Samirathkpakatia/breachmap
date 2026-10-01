@@ -65,3 +65,25 @@ export type Scenario = {
   depart: string; // identifiant de l'actif compromis au départ
   mesures_suggerees: string[];
 };
+
+// Un risque du registre (système d'information ou solution).
+export type Risque = {
+  id: string;
+  portee: "si" | "solution";
+  actif: string;
+  menace: string;
+  vulnerabilite: string;
+  vraisemblance: number; // de 1 à 5
+  impact: number; // de 1 à 5
+  criticite: number; // vraisemblance x impact, calculée par l'API
+  niveau: Niveau;
+  traitement: string;
+  scenario: string | null; // scénario simulé correspondant, le cas échéant
+};
+
+// Ce que renvoie la route /registre.
+export type Registre = {
+  risques: Risque[];
+  grille: Record<string, Niveau>; // niveau de chaque case "vraisemblance-impact"
+  seuils: Record<string, number>; // seuils des niveaux sur le produit
+};
