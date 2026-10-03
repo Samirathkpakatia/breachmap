@@ -5,6 +5,7 @@ from moteur.mesures import EFFICACITE
 from moteur.risque import comparer, evaluer
 from moteur.registre import SEUILS, charger_registre, grille
 from moteur.synthese import synthese
+from ml.priorisation import metriques as metriques_ml, prioriser
 from moteur.graphe import (
     charger_environnement,
     charger_scenarios,
@@ -88,3 +89,13 @@ def registre():
 def tableau_de_bord():
     """Renvoie la synthèse : indicateurs, scénarios classés, répartition des risques."""
     return synthese()
+
+@app.get("/priorisation")
+def priorisation():
+    """Compare la priorisation du modèle ML à celle du moteur, avec les métriques."""
+    try:
+        return {"scenarios": prioriser(), "metriques": metriques_ml()}
+    except FileNotFoundError:
+        # 409 et non 503 : le frontend affiche le message tout de suite
+        # au lieu de croire que Render se réveille et de réessayer.
+        raise HTTPException(status_code=409, detail="Modèle non entraîné")

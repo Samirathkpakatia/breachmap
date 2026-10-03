@@ -1,0 +1,109 @@
+{
+  "modele": "Forêt aléatoire (200 arbres)",
+  "nb_lignes": 7800,
+  "nb_variantes": 150,
+  "nb_entrainement": 5824,
+  "nb_test": 1976,
+  "non_triviales": {
+    "nb_test": 1460,
+    "exactitude": 0.844,
+    "f1_moyen": 0.808,
+    "exactitude_reference": 0.408,
+    "f1_moyen_reference": 0.145
+  },
+  "classes": [
+    "faible",
+    "moyen",
+    "élevé",
+    "critique"
+  ],
+  "repartition": {
+    "faible": 4285,
+    "moyen": 1848,
+    "élevé": 1287,
+    "critique": 380
+  },
+  "exactitude": 0.885,
+  "f1_moyen": 0.82,
+  "exactitude_reference": 0.563,
+  "f1_moyen_reference": 0.18,
+  "validation_croisee": {
+    "moyenne": 0.822,
+    "ecart_type": 0.013
+  },
+  "rapport": {
+    "faible": {
+      "precision": 0.9827089337175793,
+      "recall": 0.9199640287769785,
+      "f1-score": 0.9503019043195541,
+      "support": 1112.0
+    },
+    "moyen": {
+      "precision": 0.7876447876447876,
+      "recall": 0.8699360341151386,
+      "f1-score": 0.8267477203647416,
+      "support": 469.0
+    },
+    "élevé": {
+      "precision": 0.8122977346278317,
+      "recall": 0.8019169329073482,
+      "f1-score": 0.8070739549839229,
+      "support": 313.0
+    },
+    "critique": {
+      "precision": 0.6111111111111112,
+      "recall": 0.8048780487804879,
+      "f1-score": 0.6947368421052632,
+      "support": 82.0
+    },
+    "accuracy": 0.8846153846153846,
+    "macro avg": {
+      "precision": 0.7984406417753275,
+      "recall": 0.8491737611449883,
+      "f1-score": 0.8197151054433705,
+      "support": 1976.0
+    },
+    "weighted avg": {
+      "precision": 0.8939969846907774,
+      "recall": 0.8846153846153846,
+      "f1-score": 0.8876836879640725,
+      "support": 1976.0
+    }
+  },
+  "matrice_confusion": [
+    [
+      1023,
+      89,
+      0,
+      0
+    ],
+    [
+      18,
+      408,
+      42,
+      1
+    ],
+    [
+      0,
+      21,
+      251,
+      41
+    ],
+    [
+      0,
+      0,
+      16,
+      66
+    ]
+  ],
+  "importance_variables": {
+    "proba_moy_sortantes": 0.262,
+    "nb_atteignables": 0.196,
+    "proba_moy_globale": 0.148,
+    "degre_sortant": 0.127,
+    "part_relations_protegees": 0.091,
+    "criticite_moy_atteignables": 0.09,
+    "criticite_depart": 0.044,
+    "nb_mesures": 0.043
+  }
+}
