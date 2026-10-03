@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
 from moteur.mesures import EFFICACITE
-from moteur.risque import comparer, evaluer
+from moteur.risque import SEUILS_SCORE, comparer, evaluer
 from moteur.registre import SEUILS, charger_registre, grille
 from moteur.synthese import synthese
 from ml.priorisation import metriques as metriques_ml, prioriser
@@ -99,3 +99,13 @@ def priorisation():
         # 409 et non 503 : le frontend affiche le message tout de suite
         # au lieu de croire que Render se réveille et de réessayer.
         raise HTTPException(status_code=409, detail="Modèle non entraîné")
+
+
+@app.get("/methode")
+def methode():
+    """Renvoie les paramètres de la méthode : seuils et efficacité des mesures."""
+    return {
+        "seuils_score": dict(SEUILS_SCORE),
+        "efficacite_mesures": EFFICACITE,
+        "seuils_registre": dict(SEUILS),
+    }

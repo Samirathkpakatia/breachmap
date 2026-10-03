@@ -111,3 +111,10 @@ export type TableauDeBord = {
   repartition_risques: Record<Niveau, number>;
   nb_risques: number;
 };
+
+// Paramètres de la méthode, tels que renvoyés par /methode.
+export type Methode = {
+  seuils_score: Record<string, number>; // seuils des niveaux sur le score (0 à 100)
+  efficacite_mesures: Record<string, number>; // part de probabilité retirée par mesure
+  seuils_registre: Record<string, number>; // seuils des niveaux sur vraisemblance x impact
+};

@@ -1,13 +1,16 @@
 from moteur.graphe import construire_graphe, simuler
 
 
+# Seuils du niveau de risque sur le score (0 à 100), du plus haut au plus bas.
+# Source unique : la page « Méthode » du frontend les reçoit de l'API.
+SEUILS_SCORE = [("critique", 35), ("élevé", 20), ("moyen", 10)]
+
+
 def niveau(score):
-    if score >= 35:
-        return "critique"
-    if score >= 20:
-        return "élevé"
-    if score >= 10:
-        return "moyen"
+    """Convertit un score (0 à 100) en niveau de risque."""
+    for nom, minimum in SEUILS_SCORE:
+        if score >= minimum:
+            return nom
     return "faible"
 
 

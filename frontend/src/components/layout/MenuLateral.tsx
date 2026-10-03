@@ -22,7 +22,7 @@ export default function MenuLateral() {
 
   return (
     // Sur grand écran : colonne fixe à gauche. Sur petit écran : bandeau en haut.
-    <aside className="border-b border-slate-200 bg-white md:sticky md:top-0 md:h-screen md:w-60 md:shrink-0 md:border-b-0 md:border-r dark:border-slate-700 dark:bg-slate-900">
+    <aside className="print:hidden border-b border-slate-200 bg-white md:sticky md:top-0 md:h-screen md:w-60 md:shrink-0 md:border-b-0 md:border-r dark:border-slate-700 dark:bg-slate-900">
       <div className="flex items-center justify-between p-3 md:block md:p-4">
         <span className="text-lg font-bold text-blue-700 dark:text-blue-400">
           BreachMap

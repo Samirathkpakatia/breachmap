@@ -74,3 +74,10 @@ def test_cors_site_autorise():
 def test_cors_site_inconnu_refuse():
     r = client.get("/", headers={"Origin": "https://site-malveillant.example"})
     assert "access-control-allow-origin" not in r.headers
+
+
+def test_methode():
+    m = client.get("/methode").json()
+    assert m["seuils_score"] == {"critique": 35, "élevé": 20, "moyen": 10}
+    assert m["efficacite_mesures"]["mfa"] == 0.6
+    assert m["seuils_registre"] == {"critique": 20, "élevé": 10, "moyen": 5}

@@ -20,3 +20,14 @@ body {
   /* Polices du système : aucun téléchargement, rendu rapide. */
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
+
+/* Impression : fond blanc et marges raisonnables, quel que soit le thème de l'écran. */
+@page {
+  margin: 18mm;
+}
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
