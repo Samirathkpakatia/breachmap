@@ -214,15 +214,23 @@ export function verifier(e: EtatEditeur): string[] {
   }
   if (new Set(ids).size !== ids.length) erreurs.push("Deux actifs ont le même identifiant.");
 
-  const vues = new Set<string>();
-  for (const r of e.relations) {
+    // Pour chaque paire (source, cible), on retient le numéro de la première relation
+  // qui l'utilise : un doublon peut alors dire précisément laquelle il répète.
+  const vues = new Map<string, number>();
+  e.relations.forEach((r, i) => {
     if (!ids.includes(r.source) || !ids.includes(r.cible)) {
-      erreurs.push("Une relation pointe vers un actif inexistant.");
+      erreurs.push(`Relation ${i + 1} : elle pointe vers un actif inexistant.`);
     }
-    if (r.source === r.cible) erreurs.push("Une relation ne peut pas relier un actif à lui-même.");
+    if (r.source === r.cible) {
+      erreurs.push(`Relation ${i + 1} : elle ne peut pas relier un actif à lui-même.`);
+    }
     const cle = `${r.source}>${r.cible}`;
-    if (vues.has(cle)) erreurs.push("Deux relations ont la même source et la même cible.");
-    vues.add(cle);
-  }
+    const premiere = vues.get(cle);
+    if (premiere !== undefined) {
+      erreurs.push(`Relation ${i + 1} : même source et même cible que la relation ${premiere + 1}.`);
+    } else {
+      vues.set(cle, i);
+    }
+  });
   return Array.from(new Set(erreurs)); // chaque message une seule fois
 }

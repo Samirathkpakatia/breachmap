@@ -126,18 +126,27 @@ export default function VueEditeur() {
       relations: e.relations.map((r, k) => (k === index ? { ...r, ...patch } : r)),
     }));
 
+    // Ajoute une relation sur la première paire (source, cible) encore libre,
+  // pour qu'un clic ne crée jamais un doublon.
   const ajouterRelation = () =>
-    setEtat((e) =>
-      e.actifs.length < 2
-        ? e
-        : {
-            ...e,
-            relations: [
-              ...e.relations,
-              { source: e.actifs[0].id, cible: e.actifs[1].id, protocole: "", probabilite: 0.5, mesures: [] },
-            ],
+    setEtat((e) => {
+      if (e.actifs.length < 2) return e;
+      const prises = new Set(e.relations.map((r) => `${r.source}>${r.cible}`));
+      for (const a of e.actifs) {
+        for (const b of e.actifs) {
+          if (a.id !== b.id && !prises.has(`${a.id}>${b.id}`)) {
+            return {
+              ...e,
+              relations: [
+                ...e.relations,
+                { source: a.id, cible: b.id, protocole: "", probabilite: 0.5, mesures: [] },
+              ],
+            };
           }
-    );
+        }
+      }
+      return e; // toutes les paires existent déjà : rien à ajouter
+    });
 
   const supprimerRelation = (index: number) =>
     setEtat((e) => ({ ...e, relations: e.relations.filter((_, k) => k !== index) }));
