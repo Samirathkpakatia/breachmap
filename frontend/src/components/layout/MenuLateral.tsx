@@ -9,6 +9,7 @@ import StatutApi from "./StatutApi";
 const LIENS = [
   { href: "/", libelle: "Tableau de bord" },
   { href: "/laboratoire", libelle: "Laboratoire" },
+  { href: "/editeur", libelle: "Mon environnement" },
   { href: "/simulation", libelle: "Simulation" },
   { href: "/risques", libelle: "Registre des risques" },
   { href: "/priorisation", libelle: "Priorisation (ML)" },

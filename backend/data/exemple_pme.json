@@ -1,0 +1,21 @@
+{
+  "nom": "PME e-commerce (exemple)",
+  "noeuds": [
+    {"id": "internet", "nom": "Internet", "type": "externe", "zone": "Externe", "criticite": 1},
+    {"id": "boutique", "nom": "Boutique en ligne", "type": "serveur", "zone": "DMZ", "criticite": 3},
+    {"id": "api_paiement", "nom": "API de paiement", "type": "serveur", "zone": "Applicative", "criticite": 4},
+    {"id": "base_clients", "nom": "Base clients", "type": "base", "zone": "Données", "criticite": 5},
+    {"id": "poste_support", "nom": "Poste du support", "type": "poste", "zone": "Interne", "criticite": 2},
+    {"id": "compte_admin", "nom": "Compte administrateur", "type": "identite", "zone": "Interne", "criticite": 5}
+  ],
+  "relations": [
+    {"source": "internet", "cible": "boutique", "protocole": "HTTPS", "probabilite": 0.8, "mesures": ["durcissement"]},
+    {"source": "boutique", "cible": "api_paiement", "protocole": "API interne", "probabilite": 0.6, "mesures": ["segmentation", "durcissement"]},
+    {"source": "api_paiement", "cible": "base_clients", "protocole": "SQL", "probabilite": 0.5, "mesures": ["moindre_privilege"]},
+    {"source": "boutique", "cible": "base_clients", "protocole": "SQL direct", "probabilite": 0.25, "mesures": ["segmentation"]},
+    {"source": "internet", "cible": "poste_support", "protocole": "Hameçonnage", "probabilite": 0.4, "mesures": ["mfa"]},
+    {"source": "poste_support", "cible": "compte_admin", "protocole": "Vol d'identifiants", "probabilite": 0.5, "mesures": ["mfa", "moindre_privilege"]},
+    {"source": "compte_admin", "cible": "base_clients", "protocole": "Accès privilégié", "probabilite": 0.9, "mesures": ["mfa"]},
+    {"source": "compte_admin", "cible": "api_paiement", "protocole": "Accès privilégié", "probabilite": 0.8, "mesures": ["mfa"]}
+  ]
+}

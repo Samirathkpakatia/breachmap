@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-
+import math
 import networkx as nx
 from moteur.mesures import EFFICACITE
 
@@ -40,25 +40,42 @@ def construire_graphe(env, mesures_actives=None):
 
 
 def simuler(g, depart):
+    """Liste tout ce qu'un attaquant peut atteindre depuis l'actif `depart`.
+
+    Pour chaque actif atteignable, on garde le chemin le PLUS PROBABLE.
+
+    Méthode : la probabilité d'un chemin est le produit des probabilités de ses
+    étapes. Maximiser un produit revient à minimiser une somme de -log(p)
+    (log d'un produit = somme des logs). On cherche donc le chemin de coût
+    minimum avec l'algorithme de Dijkstra, qui reste rapide même sur de gros
+    graphes, contrairement à l'énumération de tous les chemins possibles.
+    """
     if depart not in g:
         raise ValueError(f"Actif inconnu : {depart}")
 
+    def cout(a, b, donnees):
+        # -log(1) = 0 : une relation certaine ne coûte rien.
+        # max(...) évite un logarithme de zéro.
+        return -math.log(max(donnees["probabilite"], 1e-12))
+
+    _, chemins = nx.single_source_dijkstra(g, depart, weight=cout)
+
     resultats = []
-    for cible in nx.descendants(g, depart):
-        meilleur = None
-        for chemin in nx.all_simple_paths(g, depart, cible):
-            proba = 1.0
-            for a, b in zip(chemin, chemin[1:]):
-                proba *= g[a][b]["probabilite"]
-            if meilleur is None or proba > meilleur[1]:
-                meilleur = (chemin, proba)
+    for cible, chemin in chemins.items():
+        if cible == depart:
+            continue
+        # On recalcule le produit réel des probabilités le long du chemin.
+        proba = 1.0
+        for a, b in zip(chemin, chemin[1:]):
+            proba *= g[a][b]["probabilite"]
         resultats.append(
             {
                 "cible": cible,
-                "chemin": meilleur[0],
-                "probabilite": round(meilleur[1], 3),
+                "chemin": chemin,
+                "probabilite": round(proba, 3),
                 "criticite": g.nodes[cible]["criticite"],
             }
         )
+    # Les actifs les plus faciles à atteindre en premier.
     resultats.sort(key=lambda r: r["probabilite"], reverse=True)
     return resultats

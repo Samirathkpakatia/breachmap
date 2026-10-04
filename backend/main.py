@@ -5,6 +5,7 @@ from moteur.mesures import EFFICACITE
 from moteur.risque import SEUILS_SCORE, comparer, evaluer
 from moteur.registre import SEUILS, charger_registre, grille
 from moteur.synthese import synthese
+from moteur.modeles import DemandeAnalyse, DemandeClassement
 from ml.priorisation import metriques as metriques_ml, prioriser
 from moteur.graphe import (
     charger_environnement,
@@ -109,3 +110,36 @@ def methode():
         "efficacite_mesures": EFFICACITE,
         "seuils_registre": dict(SEUILS),
     }
+
+
+@app.post("/analyse")
+def analyse(demande: DemandeAnalyse):
+    """Compare le risque avant/après pour un environnement envoyé par l'utilisateur.
+
+    Rien n'est stocké : l'environnement est validé, utilisé pour le calcul,
+    puis oublié. FastAPI refuse automatiquement (erreur 422) toute entrée
+    qui ne respecte pas les règles de moteur/modeles.py.
+    """
+    return comparer(demande.environnement.model_dump(), demande.depart, demande.mesures)
+
+
+@app.post("/analyse/classement")
+def analyse_classement(demande: DemandeClassement):
+    """Score de chaque actif pris comme point de compromission (scénarios générés)."""
+    env = demande.environnement.model_dump()
+    g = construire_graphe(env, demande.mesures)
+    lignes = []
+    for n in env["noeuds"]:
+        ev = evaluer(g, n["id"])
+        lignes.append(
+            {
+                "depart": n["id"],
+                "nom": n["nom"],
+                "score": ev["score"],
+                "niveau": ev["niveau"],
+                "nb_atteints": len(ev["atteignables"]),
+            }
+        )
+    # Les actifs dont la compromission est la plus grave en premier.
+    lignes.sort(key=lambda l: l["score"], reverse=True)
+    return lignes

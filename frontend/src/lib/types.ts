@@ -118,3 +118,13 @@ export type Methode = {
   efficacite_mesures: Record<string, number>; // part de probabilité retirée par mesure
   seuils_registre: Record<string, number>; // seuils des niveaux sur vraisemblance x impact
 };
+
+// Une ligne du classement des actifs, renvoyée par /analyse/classement :
+// le score obtenu si cet actif est le point de départ de la compromission.
+export type LigneClassement = {
+  depart: string;
+  nom: string;
+  score: number;
+  niveau: Niveau;
+  nb_atteints: number;
+};
