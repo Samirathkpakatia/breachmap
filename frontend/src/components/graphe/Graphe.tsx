@@ -14,6 +14,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import type { Environnement } from "@/lib/types";
+import { useThemeSombre } from "@/hooks/useThemeSombre";
 
 // États possibles d'un actif pendant une simulation (utilisés à l'étape 3) :
 // - depart : l'actif compromis au départ
@@ -102,6 +103,8 @@ export default function Graphe({
   afficherProbabilites = false,
   probasLiens
 }: Props) {
+
+  const sombre = useThemeSombre();
   // Actifs de l'API -> blocs du graphe. Positions issues de lab.json.
   const noeuds: NoeudActif[] = useMemo(
     () =>
@@ -165,7 +168,7 @@ export default function Graphe({
         nodeTypes={nodeTypes}
         nodesDraggable={false} // on ne déplace pas les actifs
         nodesConnectable={false} // on ne crée pas de lien à la main
-        colorMode="system" // suit le thème clair/sombre du système
+        colorMode={sombre ? "dark" : "light"}
         fitView
         onNodeClick={(_, n) => onSelect(n.id)} // clic sur un actif = sélection
         onPaneClick={() => onSelect(null)} // clic dans le vide = désélection

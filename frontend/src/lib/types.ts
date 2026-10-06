@@ -128,3 +128,62 @@ export type LigneClassement = {
   niveau: Niveau;
   nb_atteints: number;
 };
+
+
+// Un scénario vu par le modèle ML ET par le moteur, pour les comparer.
+export type ScenarioML = {
+  id: string;
+  nom: string;
+  score_moteur: number;
+  niveau_moteur: Niveau;
+  niveau_ml: Niveau;
+  confiance_ml: number; // entre 0 et 1
+  probas: Record<string, number>; // probabilité estimée de chaque niveau
+  indice_priorite: number; // probabilité d'être au moins « élevé »
+  concordance: boolean; // le modèle et le moteur donnent-ils le même niveau ?
+  rang_moteur: number;
+  rang_ml: number;
+};
+
+// Une ligne du rapport de classification : performances pour un niveau.
+export type LigneRapport = {
+  precision: number;
+  recall: number;
+  "f1-score": number;
+  support: number; // nombre de lignes de test de ce niveau
+};
+
+// Les performances mesurées lors de l'entraînement.
+export type MetriquesML = {
+  modele: string;
+  nb_lignes: number;
+  nb_variantes: number;
+  nb_entrainement: number;
+  nb_test: number;
+  // Mêmes mesures sans les actifs qui n'atteignent rien. Facultatif : absent
+  // des anciens fichiers de métriques, la page doit alors rester fonctionnelle.
+  non_triviales?: {
+    nb_test: number;
+    exactitude: number;
+    f1_moyen: number;
+    exactitude_reference: number;
+    f1_moyen_reference: number;
+  };
+  classes: Niveau[]; // du plus faible au plus élevé
+  repartition: Record<string, number>;
+  exactitude: number;
+  f1_moyen: number;
+  exactitude_reference: number;
+  f1_moyen_reference: number;
+  validation_croisee: { moyenne: number; ecart_type: number };
+  // Les niveaux sont des LigneRapport ; "accuracy" est un simple nombre.
+  rapport: Record<string, LigneRapport | number>;
+  matrice_confusion: number[][]; // lignes = réel, colonnes = prédit
+  importance_variables: Record<string, number>;
+};
+
+// Ce que renvoie la route /priorisation.
+export type Priorisation = {
+  scenarios: ScenarioML[]; // classés selon le modèle
+  metriques: MetriquesML;
+};

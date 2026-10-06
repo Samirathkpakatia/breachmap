@@ -1,5 +1,11 @@
 import EnTetePage from "@/components/layout/EnTetePage";
+import VuePriorisation from "@/components/priorisation/VuePriorisation";
 
-export default function Page() {
-  return <EnTetePage titre="Priorisation des scénarios" description="Aide à la priorisation par Machine Learning : résultats, métriques et limites." />;
+export default function PagePriorisation() {
+  return (
+    <>
+      <EnTetePage titre="Priorisation des scénarios" />
+      <VuePriorisation />
+    </>
+  );
 }
