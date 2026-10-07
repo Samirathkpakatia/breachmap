@@ -129,6 +129,7 @@ export default function FeuilleRapport({
 
       <Titre n={7}>Limites</Titre>
       <p>
+        Les données de ce rapport sont simulées : aucune donnée réelle n'est utilisée.{" "}
         Ce rapport est une estimation fondée sur un modèle simplifié : probabilités et
         efficacités des mesures sont des hypothèses, les étapes d'un chemin sont supposées
         indépendantes, et rien ne garantit qu'une attaque réelle suivra le chemin calculé.

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import MenuLateral from "@/components/layout/MenuLateral";
 import BoutonTheme from "@/components/layout/BoutonTheme";
+import BandeauSimule from "@/components/layout/BandeauSimule";
 
 export const metadata: Metadata = {
   title: "BreachMap",
@@ -31,6 +32,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="absolute right-4 top-4 z-10 md:right-6 md:top-6 print:hidden">
               <BoutonTheme />
             </div>
+            {/* pr-24 : laisse la place au bouton de thème, en haut à droite */}
+            <div className="pr-24">
+              <BandeauSimule />
+            </div>
+            {children}
             {children}
           </main>
         </div>
