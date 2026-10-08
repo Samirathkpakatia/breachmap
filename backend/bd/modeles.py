@@ -77,6 +77,9 @@ class ActifBD(Base):
 
 
 class RelationBD(Base):
+        # La base supprime déjà ces lignes en cascade quand leur actif disparaît :
+    # SQLAlchemy ne doit donc pas s'étonner d'en trouver 0 à supprimer.
+    __mapper_args__ = {"confirm_deleted_rows": False}
     __tablename__ = "relations"
     __table_args__ = (
         # Une relation ne peut viser que des actifs QUI EXISTENT dans le même environnement.
